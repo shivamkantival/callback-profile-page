@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import update from 'immutability-helper';
 import './index.css';
 
 
 function InputComponent(props) {
-    let totalInput = null;
+    let rowNum = null;
+    let colNum = null;
 
     const handleSave = () => {
-        props.handleSave(totalInput.value);
+        props.handleSave(rowNum.value, colNum.value);
     }
 
     const keystroke = (event) => {
@@ -18,7 +20,10 @@ function InputComponent(props) {
     return (
         <div className="container input-component" onKeyUp={keystroke} >
             <div className="half" >
-                Total Profiles:    <input type="number" ref={input => {totalInput = input}} style={{width: `70%` }} />
+                Number of rows :    <input type="number" ref={input => {rowNum = input}} style={{width: `40%` }} />
+            </div>
+            <div className="half" >
+                Nmber of columns :    <input type="number" ref={input => {colNum = input}} style={{width: `40%` }} />
             </div>
             <button type="button" onClick={handleSave} className="five" >Save</button>
         </div>
@@ -35,9 +40,10 @@ function Head(props) {
 
 function Card(props) {
     const {name, email, image} = props.card;
+    const cardWidth = Math.floor(100/props.columns);
     return (
-        <div className="container card wrap" >
-            <div style={{"margin-bottom": "10px"}}>
+        <div className="container card wrap" style={{width:`${cardWidth}%`}} >
+            <div style={{"marginBottom": "10px"}}>
                 <img src={image} alt={name} style={{width: `auto` }} className="image" />
             </div>
             <div className="card__hidden" >
@@ -58,20 +64,21 @@ class CardHolder extends React.Component {
         this.state = {
             cardsArray: [],
         };
+        this.makeCard = this.makeCard.bind(this);
     }
 
     appendCard = (response) => {
         return new Promise(resolve => {
             const {email, name: {first, last}, picture:{medium: image}} = JSON.parse(response).results[0];
-            const {cardsArray} = this.state
-            cardsArray.push({
-                email,
-                name: first + " " +last,
-                image,
+            const newObj = {
+                                email,
+                                name: first + " " + last,
+                                image,
+                            };
+            const newState = update(this.state, {
+                cardsArray:{$push: [newObj]}
             });
-            this.setState({
-                cardsArray,
-            });
+            this.setState(newState);
             resolve();
         })
         
@@ -125,10 +132,14 @@ class CardHolder extends React.Component {
         }
     }
 
+    makeCard(cardDetail) {
+        return <Card key={cardDetail.email} card={cardDetail} columns={this.props.numPerRow} />;
+    }
+
     render() {
         return(
             <div className="container wrap" >
-                {this.state.cardsArray.map( cardDetail => <Card key={cardDetail.email} card={cardDetail} /> )}
+                {this.state.cardsArray.map( this.makeCard )}
             </div>
         )
     }
@@ -139,16 +150,20 @@ class App extends React.Component {
         super(props);
         this.state =  {
             displayedCardTotal: 0,
-            numPerRow: 0,
+            columns: 0,
             newCardsOrdered: 0,
+            rows: 0,
         }
     }
 
-    handleSave = (newTotal) => {
+    handleSave = (rowNum, colNum) => {
         const {displayedCardTotal} = this.state;
+        const newTotal = parseInt(rowNum, 10)*parseInt(colNum, 10);
         if(displayedCardTotal < newTotal) {
             this.setState({
-                newCardsOrdered: parseInt(newTotal, 10) - displayedCardTotal,
+                newCardsOrdered: (parseInt(rowNum, 10)*parseInt(colNum, 10)) - displayedCardTotal,
+                columns: colNum,
+                rows: rowNum,
             })
         }
     }
@@ -162,11 +177,12 @@ class App extends React.Component {
     }
 
     render() {
+        const {newCardsOrdered, columns} = this.state;
         return(
             <div>
                 <Head />
                 <InputComponent handleSave={this.handleSave} />
-                <CardHolder newCardsOrdered={this.state.newCardsOrdered} numPerRow='4' handleSuccess={this.handleSuccess} />
+                <CardHolder newCardsOrdered={newCardsOrdered} numPerRow={columns} handleSuccess={this.handleSuccess} />
             </div>
         )
     }

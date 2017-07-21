@@ -39,13 +39,8 @@
 .card {
   flex-direction: column;
   text-align: center;
-  width: 24%;
    border: 2px solid white;
   margin-bottom: 20px;
-}
-
-.card:hover {
-  border: 2px solid olivedrab;
 }
 
 .card:hover .card__hidden {

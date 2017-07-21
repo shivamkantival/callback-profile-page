@@ -16,6 +16,7 @@
   },
   "homepage": "https://shivamkantival.github.io/callback-profile-page",
   "devDependencies": {
-    "gh-pages": "^1.0.0"
+    "gh-pages": "^1.0.0",
+    "immutability-helper": "^2.3.0"
   }
 }

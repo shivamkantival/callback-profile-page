@@ -4,31 +4,30 @@ import './index.css';
 
 
 function InputComponent(props) {
-    let rowInput = null;
     let totalInput = null;
 
     const handleSave = () => {
-        props.handleSave(totalInput.value, rowInput.value);
+        props.handleSave(totalInput.value);
+    }
+
+    const keystroke = (event) => {
+        if(event.keyCode === 13)
+            handleSave();
     }
 
     return (
-        <div>
-            <div>
-                Profiles per row
-                <input type="number" ref={input => {rowInput = input}} />
+        <div className="container input-component" onKeyUp={keystroke} >
+            <div className="half" >
+                Total Profiles:    <input type="number" ref={input => {totalInput = input}} style={{width: `70%` }} />
             </div>
-            <div>
-                Total Profiles
-                <input type="number" ref={input => {totalInput = input}} />
-            </div>
-            <button type="button" onClick={handleSave} >Save</button>
+            <button type="button" onClick={handleSave} className="five" >Save</button>
         </div>
     )
 }
 
 function Head(props) {
     return(
-        <div>
+        <div className="header" >
             <p>Profile Page</p>
         </div>
     )
@@ -37,14 +36,19 @@ function Head(props) {
 function Card(props) {
     const {name, email, image} = props.card;
     return (
-        <div>
-            <div>
+        <div className="container card wrap" >
+            <div style={{width:'25%'}}>
+                <img src={image} alt={name} style={{width: `auto` }} />
+            </div>
+            <div style={{
+                    width: `70%`, 
+                    "padding-left" : "8px" 
+                }} >
                 {name}
+                <div>
+                    {email}
+                </div>
             </div>
-            <div>
-                {email}
-            </div>
-            <img src={image} />
         </div>
     );
 }
@@ -100,10 +104,11 @@ class CardHolder extends React.Component {
             self.getCardDetail().then(response => {
                 counter--;
                 cardsDrawn++;
-                self.appendCard(response);
+                return self.appendCard(response);
             }).then(() => {
-                if(counter)
-                    getElement();
+                if(counter){
+                    window.setTimeout(getElement, 300);
+                }
                 else {
                     self.props.handleSuccess(cardsDrawn);
                 }
@@ -123,7 +128,7 @@ class CardHolder extends React.Component {
 
     render() {
         return(
-            <div>
+            <div className="container wrap" >
                 {this.state.cardsArray.map( cardDetail => <Card key={cardDetail.email} card={cardDetail} /> )}
             </div>
         )
@@ -140,7 +145,7 @@ class App extends React.Component {
         }
     }
 
-    handleSave = (newTotal, newPerRow) => {
+    handleSave = (newTotal) => {
         const {displayedCardTotal} = this.state;
         if(displayedCardTotal < newTotal) {
             this.setState({
@@ -161,7 +166,7 @@ class App extends React.Component {
         return(
             <div>
                 <Head />
-                <InputComponent handleSave={this.handleSave}/>
+                <InputComponent handleSave={this.handleSave} />
                 <CardHolder newCardsOrdered={this.state.newCardsOrdered} numPerRow='4' handleSuccess={this.handleSuccess} />
             </div>
         )

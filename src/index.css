@@ -1,5 +1,48 @@
-body {
+* {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  padding: 20px;
+    /* justify-content: space-between;   */
+}
+
+.header {
+  width: 100%;
+  background: #2D2D2D;
+  text-align: center;
+  size: 40px;
+  color: white;
+  padding: 30px;
+}
+
+.input-component {
+  justify-content: space-between;
+  background: rgba(0,0,0,0.04);
+}
+
+.half {
+  flex: 4;
+}
+
+.five {
+  flex: 1;
+}
+.wrap {
+  flex-wrap: wrap;
+}
+.card {
+  width: 24%;
+  padding-left: 10px;
+  border: 1px solid olivedrab;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  /* transition-property: width, height;
+  transition-delay: 2s;
+  transition-timing-function: ease-in; */
 }

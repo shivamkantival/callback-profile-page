@@ -23,7 +23,7 @@
 
 .input-component {
   justify-content: space-between;
-  background: rgba(0,0,0,0.04);
+  background: rgba(150, 135, 135, 0.27);
 }
 
 .half {
@@ -37,12 +37,31 @@
   flex-wrap: wrap;
 }
 .card {
+  flex-direction: column;
+  text-align: center;
   width: 24%;
   padding-left: 10px;
-  border: 1px solid olivedrab;
+   border: 2px solid white; 
   margin-left: 10px;
   margin-bottom: 20px;
-  /* transition-property: width, height;
-  transition-delay: 2s;
-  transition-timing-function: ease-in; */
+}
+
+.card:hover {
+  border: 2px solid olivedrab;
+}
+
+.card:hover .card__hidden {
+  visibility: visible;
+}
+
+.image {
+  border: 2px solid rgba(150, 135, 135, 0.27);
+  border-radius: 50%;
+}
+
+.card__name {
+  color: olivedrab;
+}
+.card__hidden {
+  visibility: hidden;
 }

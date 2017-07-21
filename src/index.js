@@ -37,14 +37,13 @@ function Card(props) {
     const {name, email, image} = props.card;
     return (
         <div className="container card wrap" >
-            <div style={{width:'25%'}}>
-                <img src={image} alt={name} style={{width: `auto` }} />
+            <div style={{"margin-bottom": "10px"}}>
+                <img src={image} alt={name} style={{width: `auto` }} className="image" />
             </div>
-            <div style={{
-                    width: `70%`, 
-                    "padding-left" : "8px" 
-                }} >
-                {name}
+            <div className="card__hidden" >
+                <div className="card__name" >
+                    {name}
+                </div>
                 <div>
                     {email}
                 </div>
@@ -67,7 +66,7 @@ class CardHolder extends React.Component {
             const {cardsArray} = this.state
             cardsArray.push({
                 email,
-                name: first + last,
+                name: first + " " +last,
                 image,
             });
             this.setState({

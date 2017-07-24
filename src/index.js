@@ -38,24 +38,29 @@ function Head(props) {
     )
 }
 
-function Card(props) {
-    const {name, email, image} = props.card;
-    const cardWidth = Math.floor(100/props.columns);
-    return (
-        <div className="container card wrap" style={{width:`${cardWidth}%`}} >
-            <div style={{"marginBottom": "10px"}}>
-                <img src={image} alt={name} style={{width: `auto` }} className="image" />
-            </div>
-            <div className="card__hidden" >
-                <div className="card__name" >
-                    {name}
+class Card extends React.PureComponent {
+
+    render() {
+        const {name, email, image} = this.props.card;
+        const cardWidth = Math.floor(100/this.props.columns);
+        console.log(name);
+        return (
+            <div className="container card wrap" style={{width:`${cardWidth}%`}} >
+                <div style={{"marginBottom": "10px"}}>
+                    <img src={image} alt={name} style={{width: `auto` }} className="image" />
                 </div>
-                <div>
-                    {email}
+                <div className="card__hidden" >
+                    <div className="card__name" >
+                        {name}
+                    </div>
+                    <div>
+                        {email}
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        );    
+    }
+    
 }
 
 class CardHolder extends React.Component {
@@ -69,11 +74,11 @@ class CardHolder extends React.Component {
 
     appendCard = (response) => {
         return new Promise(resolve => {
-            const {email, name: {first, last}, picture:{medium: image}} = JSON.parse(response).results[0];
+            const {email, name, picture} = JSON.parse(response).results[0];
             const newObj = {
                                 email,
-                                name: first + " " + last,
-                                image,
+                                name: name.first + " " + name.last,
+                                image: picture.medium,
                             };
             const newState = update(this.state, {
                 cardsArray:{$push: [newObj]}

@@ -39,8 +39,9 @@
 .card {
   flex-direction: column;
   text-align: center;
-   border: 2px solid white;
+  border: 2px solid white;
   margin-bottom: 20px;
+  word-wrap: break-word;
 }
 
 .card:hover .card__hidden {
@@ -57,4 +58,5 @@
 }
 .card__hidden {
   visibility: hidden;
+  width: 100%;
 }
